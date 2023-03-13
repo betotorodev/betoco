@@ -22,8 +22,7 @@ if (stagedFiles.length === 0) {
 }
 
 const commitMessage = await text({
-  message: colors.cyan('Introduce el mensaje del commit'),
-  placeholder: 'Add new feature, etc'
+  message: colors.cyan('Introduce el mensaje del commit')
 })
 
 const commitType = await select({
@@ -40,8 +39,8 @@ let breakingChange = false
 if (realese) {
   breakingChange = await confirm({
     initialValue: false,
-    message: `¿Tiene este commit cambios que rompen la compatibilidad anterior?
-      ${colors.gray('Si la respuesta es sí, debeerías crear un commit con el tipo "BREAKING CHANGE" y al hacer release se publicará una versión mejor')}
+    message: `${colors.cyan('¿Tiene este commit cambios que rompen la compatibilidad anterior?')}
+      ${colors.yellow('Si la respuesta es sí, debeerías crear un commit con el tipo "BREAKING CHANGE" y al hacer release se publicará una versión mejor')}
     `
   })
 }
@@ -51,10 +50,10 @@ commit = breakingChange ? `${commit} [BREAKING CHANGE]` : commit
 
 const shouldConfirm = await confirm({
   initialValue: true,
-  message: `¿Quieres crear el commit con el siguiente mensaje? 
+  message: `${colors.cyan('¿Quieres crear el commit con el siguiente mensaje?')} 
   ${colors.green(colors.bold(commit))}
   
-  ¿Confirmas?
+  ${colors.yellow('¿Confirmas?')}
   `
 })
 
@@ -63,4 +62,4 @@ if (!shouldConfirm) {
   process.exit(0)
 }
 
-outro('Gracias por usar el asistente')
+outro(colors.green('Gracias por usar el asistente'))
