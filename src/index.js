@@ -1,6 +1,6 @@
-import { intro, outro, text, select, confirm } from '@clack/prompts'
+import { intro, outro, text, select, confirm, multiselect } from '@clack/prompts'
 import { COMMIT_TYPES } from './commit-types.js'
-import { getChangedFiles, getStagedFiles, getCommit } from './git.js'
+import { getChangedFiles, getStagedFiles, gitCommit, gitAdd } from './git.js'
 import { trytm } from '@bdsqqq/try'
 import colors from 'picocolors'
 
@@ -16,9 +16,16 @@ if (errorChangedFiled ?? errorStagedFiles) {
   process.exit(1)
 }
 
-if (stagedFiles.length === 0) {
-  outro(colors.red('Error: No hay archivos que comitear'))
-  process.exit(1)
+if (stagedFiles.length === 0 && changedFiles.length > 0) {
+  const files = await multiselect({
+    message: colors.cyan('Selecciona los archivos que quieres agregar al commit:'),
+    options: changedFiles.map(file => ({
+      value: file,
+      label: file
+    }))
+  })
+
+  await gitAdd({ files })
 }
 
 const commitMessage = await text({
