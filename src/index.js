@@ -29,7 +29,16 @@ if (stagedFiles.length === 0 && changedFiles.length > 0) {
 }
 
 const commitMessage = await text({
-  message: colors.cyan('Introduce el mensaje del commit')
+  message: colors.cyan('Introduce el mensaje del commit'),
+  validate: (value) => {
+    if (value.length === 0) {
+      return colors.red('El mensaje no puede estar vacío')
+    }
+
+    if (value.length > 25) {
+      return colors.red('El mensaje no puede tener más de 25 caracteres')
+    }
+  }
 })
 
 const commitType = await select({
