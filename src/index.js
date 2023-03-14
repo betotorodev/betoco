@@ -69,4 +69,6 @@ if (!shouldConfirm) {
   process.exit(0)
 }
 
+await gitCommit({ commit })
+
 outro(colors.green('Gracias por usar el asistente'))
