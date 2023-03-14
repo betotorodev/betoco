@@ -9,8 +9,7 @@ function cleanStdout (stdout) {
 
 export async function getChangedFiles () {
   const { stdout } = await exectAsync('git status --porcelain')
-  return cleanStdout(stdout)
-    .map(line => line.split(' ').at(-1))
+  return cleanStdout(stdout).map(line => line.split(' ').at(-1))
 }
 
 export async function getStagedFiles () {
@@ -18,7 +17,13 @@ export async function getStagedFiles () {
   return cleanStdout(stdout)
 }
 
-export async function getCommit ({ commit } = {}) {
-  const { stdout } = await exectAsync(`git commit -m ${commit}`)
+export async function gitCommit ({ commit } = {}) {
+  const { stdout } = await exectAsync(`git commit -m "${commit}"`)
+  return cleanStdout(stdout)
+}
+
+export async function gitAdd ({ files = [] } = {}) {
+  const filesLine = files.join(' ')
+  const { stdout } = await exectAsync(`git add "${filesLine}"`)
   return cleanStdout(stdout)
 }
